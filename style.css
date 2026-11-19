@@ -1,0 +1,47 @@
+:root{
+  --bg:#eef3f6; --panel:#ffffff; --ink:#14232f; --muted:#5a6b78; --line:#cfdae2;
+  --ocean:#1f6fa8; --ocean-soft:#d8e8f4; --sun:#e89a1c; --sun-soft:#fbe9c8; --land:#7fb069;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  /* colori usati dai diagrammi del riassunto */
+  --cds-text-primary:var(--ink); --cds-text-secondary:var(--muted); --cds-chart-axis:#8b9aa6;
+  --cds-chart-categorical-1:var(--ocean); --cds-chart-categorical-2:var(--sun); --cds-chart-categorical-3:var(--land);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1620; --panel:#15212d; --ink:#e6eef4; --muted:#9db0bf; --line:#2a3a4a;
+  --ocean:#5fa8de; --ocean-soft:#1b3348; --sun:#f2b04a; --sun-soft:#3a2c14; --land:#8cc277;
+  --cds-chart-axis:#6c7f8f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1620; --panel:#15212d; --ink:#e6eef4; --muted:#9db0bf; --line:#2a3a4a;
+  --ocean:#5fa8de; --ocean-soft:#1b3348; --sun:#f2b04a; --sun-soft:#3a2c14; --land:#8cc277;
+  --cds-chart-axis:#6c7f8f; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding:24px 16px 48px}
+a{color:var(--ocean)}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15}
+h1{font-weight:800;font-size:clamp(28px,5vw,42px);margin:0 0 8px}
+.tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.crumbs{margin:0;font-size:14px}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+nav a{font-size:14px;background:var(--ocean-soft);padding:6px 12px;border-radius:999px;text-decoration:none}
+.doc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 24px 24px;min-width:0}
+.doc h2{font-weight:600;font-size:26px;margin:36px 0 8px;padding-top:16px;border-top:1px solid var(--line);scroll-margin-top:16px}
+.doc h2:first-of-type{border-top:0}
+.doc h3{font-weight:600;font-size:19px;margin:24px 0 6px}
+.doc li p{margin:4px 0}
+.doc ul{padding-left:22px}
+figure{margin:20px 0;background:var(--bg);border-radius:10px;padding:12px}
+figure svg{width:100%;height:auto;display:block;font-family:var(--body)}
+figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.doc table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow-x:auto;margin:16px 0}
+.doc th,.doc td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.doc th{color:var(--muted);font-weight:700}
+footer{color:var(--muted);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;text-decoration:none;color:var(--ink)}
+.card:hover,.card:focus-visible{border-color:var(--ocean);box-shadow:0 0 0 3px var(--ocean-soft);outline:none}
+.card h2{margin:0 0 6px;font-size:22px;font-weight:600}
+.card p{margin:0;color:var(--muted)}
+.card .go{display:inline-block;margin-top:12px;color:var(--ocean);font-weight:700}
