@@ -1,0 +1,407 @@
+<!doctype html><html lang="it"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Laboratorio Terra nello spazio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: una colonna di "esperimenti", ciascuno con disegno a sinistra e comandi + risultati a destra */
+:root{
+  --bg:#eef3f6; --panel:#ffffff; --ink:#14232f; --muted:#5a6b78; --line:#cfdae2;
+  --ocean:#1f6fa8; --ocean-soft:#d8e8f4; --sun:#e89a1c; --sun-soft:#fbe9c8; --night:#1d2a3a; --land:#7fb069;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1620; --panel:#15212d; --ink:#e6eef4; --muted:#9db0bf; --line:#2a3a4a;
+  --ocean:#5fa8de; --ocean-soft:#1b3348; --sun:#f2b04a; --sun-soft:#3a2c14; --night:#070c12; --land:#8cc277; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1620; --panel:#15212d; --ink:#e6eef4; --muted:#9db0bf; --line:#2a3a4a;
+  --ocean:#5fa8de; --ocean-soft:#1b3348; --sun:#f2b04a; --sun-soft:#3a2c14; --night:#070c12; --land:#8cc277; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:24px 48px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+header h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,44px);line-height:1.05;margin:0 0 8px;text-wrap:balance}
+header p{margin:0;color:var(--muted);max-width:62ch}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+nav a{font-size:14px;color:var(--ocean);background:var(--ocean-soft);padding:6px 12px;border-radius:999px;text-decoration:none}
+nav a:hover,nav a:focus-visible{outline:2px solid var(--ocean);outline-offset:1px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;scroll-margin-top:16px}
+@media (max-width:760px){section{grid-template-columns:1fr}}
+.tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+section h2{font-family:var(--display);font-weight:600;font-size:24px;margin:0 0 6px;text-wrap:balance}
+section .intro{margin:0 0 14px;color:var(--muted)}
+.fig{min-width:0}
+.fig svg{width:100%;height:auto;display:block;border-radius:10px;background:var(--bg);touch-action:manipulation}
+.ctl{display:flex;flex-direction:column;gap:14px;min-width:0}
+label{font-weight:700;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+label output{font-variant-numeric:tabular-nums;color:var(--ocean)}
+input[type=range]{width:100%;accent-color:var(--ocean)}
+input[type=time],input[type=number]{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.res{background:var(--ocean-soft);border-radius:10px;padding:12px 14px;font-variant-numeric:tabular-nums}
+.res b{font-size:20px}
+.note{font-size:14px;color:var(--muted);margin:0}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+button:hover,button:focus-visible{border-color:var(--ocean);outline:none;box-shadow:0 0 0 2px var(--ocean-soft)}
+button[aria-pressed=true]{background:var(--ocean);color:var(--panel);border-color:var(--ocean)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+td,th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:400}
+.day{color:var(--sun);font-weight:700}.nightc{color:var(--muted)}
+svg text{font-family:var(--body)}
+footer{color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+<p style="margin:0;font-size:14px"><a href="./" style="color:var(--ocean)">← Home</a> · <a href="riassunto.html" style="color:var(--ocean)">Riassunto</a></p>
+<header>
+  <p class="tag">Unità T1 · paragrafi 5–11</p>
+  <h1>Laboratorio: la Terra nello spazio</h1>
+  <p>Sei esperimenti da toccare con mano. Muovi i cursori, clicca sui disegni e guarda che cosa cambia: servono a capire le cose del riassunto che a parole sembrano difficili.</p>
+  <nav>
+    <a href="#eratostene">Eratostene</a><a href="#coordinate">Latitudine e longitudine</a><a href="#longitudine">Longitudine con l'orologio</a><a href="#fusi">Fusi orari</a><a href="#stagioni">Stagioni</a><a href="#luna">Fasi lunari</a>
+  </nav>
+</header>
+
+<!-- 1 ERATOSTENE -->
+<section id="eratostene">
+  <div class="fig"><svg id="erSvg" viewBox="0 0 400 300" role="img" aria-label="Raggi del Sole paralleli che arrivano su Siene e Alessandria"></svg></div>
+  <div class="ctl">
+    <div><p class="tag">Paragrafo 5D</p><h2>Misura la Terra come Eratostene</h2>
+    <p class="intro">I raggi del Sole arrivano paralleli. A Siene il bastone non fa ombra, ad Alessandria sì. L'angolo dell'ombra è lo stesso angolo che c'è al centro della Terra tra le due città.</p></div>
+    <label for="erAng">Angolo dell'ombra ad Alessandria <output id="erAngOut"></output></label>
+    <input id="erAng" type="range" min="2" max="40" step="0.1" value="7.2">
+    <label for="erDist">Distanza tra le due città (km)</label>
+    <input id="erDist" type="number" min="100" max="5000" step="0.5" value="787.5">
+    <div class="res" id="erRes" aria-live="polite"></div>
+    <div class="btns"><button type="button" id="erReset">Valori di Eratostene (7° 12′, 787,5 km)</button></div>
+  </div>
+</section>
+
+<!-- 2 COORDINATE -->
+<section id="coordinate">
+  <div class="fig"><svg id="mapSvg" viewBox="0 0 400 230" role="img" aria-label="Reticolato geografico: clicca un punto per leggerne latitudine e longitudine"></svg>
+  <p class="note" style="margin-top:6px">Clicca (o tocca) un punto qualsiasi del reticolato.</p></div>
+  <div class="ctl">
+    <div><p class="tag">Paragrafo 6</p><h2>Trova latitudine e longitudine</h2>
+    <p class="intro">La <b>latitudine</b> dice quanto sei a Nord o a Sud dell'Equatore (linea orizzontale blu). La <b>longitudine</b> dice quanto sei a Est o a Ovest di Greenwich (linea verticale arancione).</p></div>
+    <div class="res" id="mapRes" aria-live="polite"></div>
+    <div class="btns" id="cityBtns"></div>
+    <p class="note">Nota come cambia "1° di longitudine" spostandoti verso i poli: i meridiani si avvicinano e lo spazio tra loro si accorcia.</p>
+  </div>
+</section>
+
+<!-- 3 LONGITUDINE CON L'OROLOGIO -->
+<section id="longitudine">
+  <div class="fig"><svg id="lonSvg" viewBox="0 0 400 230" role="img" aria-label="Il Sole si sposta di 15 gradi ogni ora"></svg></div>
+  <div class="ctl">
+    <div><p class="tag">Paragrafo 10A</p><h2>Trova la longitudine con due orologi</h2>
+    <p class="intro">Il Sole fa il giro della Terra (360°) in 24 ore: 15° ogni ora, 1° ogni 4 minuti. Confronta l'ora del luogo con l'ora di Greenwich.</p></div>
+    <div class="row">
+      <div><label for="lonLocal">Ora locale</label><input id="lonLocal" type="time" value="15:00"></div>
+      <div><label for="lonGr">Ora di Greenwich</label><input id="lonGr" type="time" value="12:00"></div>
+    </div>
+    <div class="res" id="lonRes" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- 4 FUSI ORARI -->
+<section id="fusi">
+  <div class="fig"><svg id="tzSvg" viewBox="0 0 400 210" role="img" aria-label="Fasce dei fusi orari con il dì e la notte"></svg></div>
+  <div class="ctl">
+    <div><p class="tag">Paragrafo 10B</p><h2>Che ore sono nel mondo?</h2>
+    <p class="intro">Ogni fuso è largo 15°. Muovi l'ora di Greenwich e guarda la zona illuminata scorrere da Est verso Ovest.</p></div>
+    <label for="tzH">Ora a Greenwich <output id="tzHOut"></output></label>
+    <input id="tzH" type="range" min="0" max="23.75" step="0.25" value="12">
+    <table><thead><tr><th>Città</th><th>Fuso</th><th>Ora</th><th></th></tr></thead><tbody id="tzBody"></tbody></table>
+    <p class="note">Ora legale esclusa. Andando verso Est l'orologio va avanti, verso Ovest va indietro.</p>
+  </div>
+</section>
+
+<!-- 5 STAGIONI -->
+<section id="stagioni">
+  <div class="fig"><svg id="seaSvg" viewBox="0 0 400 450" role="img" aria-label="Orbita della Terra attorno al Sole e Terra vista di lato con l'asse inclinato"></svg></div>
+  <div class="ctl">
+    <div><p class="tag">Paragrafo 9</p><h2>Perché ci sono le stagioni</h2>
+    <p class="intro">L'asse della Terra è inclinato e punta sempre nella stessa direzione. Così, durante l'anno, ora il Polo nord ora il Polo sud è rivolto verso il Sole.</p></div>
+    <label for="seaDay">Giorno dell'anno <output id="seaDayOut"></output></label>
+    <input id="seaDay" type="range" min="1" max="365" step="1" value="172">
+    <div class="btns" id="seaBtns"></div>
+    <label for="seaLat">Latitudine del luogo <output id="seaLatOut"></output></label>
+    <input id="seaLat" type="range" min="-90" max="90" step="1" value="42">
+    <div class="res" id="seaRes" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- 6 LUNA -->
+<section id="luna">
+  <div class="fig"><svg id="moonSvg" viewBox="0 0 400 260" role="img" aria-label="La Luna attorno alla Terra e come la vediamo dalla Terra"></svg></div>
+  <div class="ctl">
+    <div><p class="tag">Paragrafo 11C</p><h2>Le fasi della Luna</h2>
+    <p class="intro">Metà Luna è sempre illuminata dal Sole. Quello che cambia è quanta parte di quella metà vediamo dalla Terra.</p></div>
+    <label for="moonAge">Giorni dalla Luna nuova <output id="moonAgeOut"></output></label>
+    <input id="moonAge" type="range" min="0" max="29.5" step="0.1" value="7.4">
+    <div class="btns" id="moonBtns"></div>
+    <div class="res" id="moonRes" aria-live="polite"></div>
+  </div>
+</section>
+
+<footer>Costruito sul <a href="riassunto.html" style="color:var(--ocean)">riassunto "La Terra nello spazio"</a> (par. 5–11). I disegni non sono in scala.</footer>
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e}
+const $=id=>document.getElementById(id);
+const fmt=(x,d=0)=>x.toLocaleString('it-IT',{minimumFractionDigits:d,maximumFractionDigits:d});
+const dms=a=>{a=Math.abs(a);let g=Math.floor(a),m=Math.round((a-g)*60);if(m===60){g++;m=0}return g+'° '+String(m).padStart(2,'0')+'′'};
+const C=()=>({ink:css('--ink'),muted:css('--muted'),line:css('--line'),ocean:css('--ocean'),oceanS:css('--ocean-soft'),sun:css('--sun'),sunS:css('--sun-soft'),night:css('--night'),panel:css('--panel'),land:css('--land'),bg:css('--bg')});
+function arrowDef(svg,id,color){const d=el('defs',{},svg);const m=el('marker',{id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'},d);el('path',{d:'M0 0L10 5L0 10z',fill:color},m)}
+
+/* ---------- 1 Eratostene ---------- */
+function drawEr(){
+  const s=$('erSvg'),c=C();s.innerHTML='';
+  const a=+$('erAng').value,d=+$('erDist').value;
+  $('erAngOut').textContent=dms(a);
+  arrowDef(s,'erA',c.sun);
+  const cx=250,cy=175,R=92;
+  // rays from left, parallel horizontal
+  for(let i=0;i<6;i++){const y=40+i*22;el('line',{x1:10,y1:y,x2:120,y2:y,stroke:c.sun,'stroke-width':1.5,'marker-end':'url(#erA)'},s)}
+  el('text',{x:12,y:30,fill:c.muted,'font-size':12},s,'raggi del Sole (paralleli)');
+  el('circle',{cx,cy,r:R,fill:c.oceanS,stroke:c.ocean,'stroke-width':1.5},s);
+  // Siene: point at angle pointing to left-up where ray is radial: place Siene at 180+? Rays horizontal from left: Siene where normal is horizontal -> leftmost point
+  const ang0=Math.PI; // Siene at left
+  const pS=[cx+R*Math.cos(ang0),cy-R*Math.sin(ang0)];
+  const t=ang0-a*Math.PI/180; // Alessandria rotated up (north) - clockwise on screen
+  const pA=[cx+R*Math.cos(t),cy-R*Math.sin(t)];
+  el('line',{x1:cx,y1:cy,x2:pS[0],y2:pS[1],stroke:c.ink,'stroke-width':1.2},s);
+  el('line',{x1:cx,y1:cy,x2:pA[0],y2:pA[1],stroke:c.ink,'stroke-width':1.2},s);
+  // angle arc at centre
+  const r1=34;el('path',{d:`M${cx+r1*Math.cos(ang0)} ${cy-r1*Math.sin(ang0)} A${r1} ${r1} 0 0 1 ${cx+r1*Math.cos(t)} ${cy-r1*Math.sin(t)}`,fill:'none',stroke:c.sun,'stroke-width':2.5},s);
+  el('text',{x:cx-26,y:cy+18,fill:c.ink,'font-size':13,'font-weight':700},s,'α′');
+  // sticks (vertical = radial)
+  const L=26,stick=(p,th)=>[p[0]+L*Math.cos(th),p[1]-L*Math.sin(th)];
+  const sS=stick(pS,ang0),sA=stick(pA,t);
+  el('line',{x1:pS[0],y1:pS[1],x2:sS[0],y2:sS[1],stroke:c.ink,'stroke-width':3},s);
+  el('line',{x1:pA[0],y1:pA[1],x2:sA[0],y2:sA[1],stroke:c.ink,'stroke-width':3},s);
+  // ray hitting Alessandria stick top, horizontal, and its shadow on ground
+  el('line',{x1:sA[0]-70,y1:sA[1],x2:sA[0],y2:sA[1],stroke:c.sun,'stroke-width':1.5,'stroke-dasharray':'4 3'},s);
+  // shadow: ray continues from stick top until meeting ground (approx line along tangent)
+  const tg=[Math.sin(t),Math.cos(t)]; // tangent direction pointing "down/south" along surface
+  const shadowLen=L*Math.tan(a*Math.PI/180);
+  el('line',{x1:pA[0],y1:pA[1],x2:pA[0]+tg[0]*shadowLen,y2:pA[1]+tg[1]*shadowLen,stroke:c.night,'stroke-width':4,'stroke-linecap':'round',opacity:.75},s);
+  el('line',{x1:sA[0],y1:sA[1],x2:pA[0]+tg[0]*shadowLen,y2:pA[1]+tg[1]*shadowLen,stroke:c.sun,'stroke-width':1.5},s);
+  el('text',{x:pS[0]-6,y:pS[1]+20,fill:c.ink,'font-size':12,'text-anchor':'end'},s,'Siene');
+  el('text',{x:pS[0]-6,y:pS[1]+34,fill:c.muted,'font-size':11,'text-anchor':'end'},s,'nessuna ombra');
+  el('text',{x:sA[0]-8,y:sA[1]-8,fill:c.ink,'font-size':12,'text-anchor':'end'},s,'Alessandria');
+  el('text',{x:cx+6,y:cy+4,fill:c.muted,'font-size':11},s,'centro');
+  el('text',{x:cx,y:292,fill:c.muted,'font-size':11,'text-anchor':'middle'},s,'angolo dell\'ombra α = angolo al centro α′');
+  const n=360/a,circ=n*d;
+  $('erRes').innerHTML=`${dms(a)} è 1/${fmt(n,1)} di 360°<br>Circonferenza = ${fmt(n,1)} × ${fmt(d,1)} km = <b>${fmt(circ)} km</b><br><span class="note">Valore vero: circa 40 000 km</span>`;
+}
+['erAng','erDist'].forEach(i=>$(i).addEventListener('input',drawEr));
+$('erReset').onclick=()=>{$('erAng').value=7.2;$('erDist').value=787.5;drawEr()};
+
+/* ---------- 2 Coordinate ---------- */
+const cities=[['Roma',41.9,12.5],['New York',40.7,-74],['Rio de Janeiro',-22.9,-43.2],['Sydney',-33.9,151.2],['Tokyo',35.7,139.7],['Il Cairo',30,31.2],['Polo nord',90,0]];
+let mapPt=[41.9,12.5];
+const MX=20,MY=12,MW=360,MH=180;
+const px=lon=>MX+(lon+180)/360*MW, py=lat=>MY+(90-lat)/180*MH;
+function drawMap(){
+  const s=$('mapSvg'),c=C();s.innerHTML='';
+  el('rect',{x:MX,y:MY,width:MW,height:MH,fill:c.oceanS,stroke:c.line},s);
+  for(let lon=-180;lon<=180;lon+=30)el('line',{x1:px(lon),y1:MY,x2:px(lon),y2:MY+MH,stroke:c.line},s);
+  for(let lat=-90;lat<=90;lat+=30)el('line',{x1:MX,y1:py(lat),x2:MX+MW,y2:py(lat),stroke:c.line},s);
+  [[23.45,'Tropico del Cancro'],[-23.45,'Tropico del Capricorno'],[66.55,'Circolo polare artico'],[-66.55,'Circolo polare antartico']].forEach(([l,n])=>{
+    el('line',{x1:MX,y1:py(l),x2:MX+MW,y2:py(l),stroke:c.muted,'stroke-dasharray':'3 3'},s);
+    el('text',{x:MX+MW-3,y:py(l)-3,fill:c.muted,'font-size':8,'text-anchor':'end'},s,n)});
+  el('line',{x1:MX,y1:py(0),x2:MX+MW,y2:py(0),stroke:c.ocean,'stroke-width':2.5},s);
+  el('text',{x:MX+4,y:py(0)-4,fill:c.ocean,'font-size':10,'font-weight':700},s,'Equatore 0°');
+  el('line',{x1:px(0),y1:MY,x2:px(0),y2:MY+MH,stroke:c.sun,'stroke-width':2.5},s);
+  el('text',{x:px(0)+4,y:MY+MH-4,fill:c.sun,'font-size':10,'font-weight':700},s,'Greenwich 0°');
+  [-180,-90,90,180].forEach(l=>el('text',{x:px(l),y:MY+MH+12,fill:c.muted,'font-size':9,'text-anchor':'middle'},s,Math.abs(l)+'°'+(l<0?'W':'E')));
+  [60,30,-30,-60].forEach(l=>el('text',{x:MX-3,y:py(l)+3,fill:c.muted,'font-size':9,'text-anchor':'end'},s,Math.abs(l)+(l>0?'N':'S')));
+  el('text',{x:MX+MW/2,y:MY+MH+24,fill:c.muted,'font-size':9,'text-anchor':'middle'},s,'← Ovest (W)        Est (E) →');
+  cities.forEach(([n,la,lo])=>{el('circle',{cx:px(lo),cy:py(la),r:2.5,fill:c.ink},s)});
+  const [la,lo]=mapPt,X=px(lo),Y=py(la);
+  el('line',{x1:px(0),y1:Y,x2:X,y2:Y,stroke:c.sun,'stroke-width':2,'stroke-dasharray':'5 3'},s);
+  el('line',{x1:X,y1:py(0),x2:X,y2:Y,stroke:c.ocean,'stroke-width':2,'stroke-dasharray':'5 3'},s);
+  el('circle',{cx:X,cy:Y,r:6,fill:'none',stroke:c.ink,'stroke-width':2},s);
+  const ns=la>0?'N':la<0?'S':'',ew=lo>0?'E':lo<0?'W':'';
+  const km=111.3*Math.cos(la*Math.PI/180);
+  $('mapRes').innerHTML=`Latitudine: <b>${dms(la)} ${ns}</b> <span class="note">(${la>0?'a Nord':la<0?'a Sud':'sull\''}${la===0?'Equatore':' dell\'Equatore'})</span><br>Longitudine: <b>${dms(lo)} ${ew}</b> <span class="note">(${lo===0?'su Greenwich':lo>0?'a Est di Greenwich':'a Ovest di Greenwich'})</span><br><span class="note">Qui 1° di longitudine misura circa ${fmt(km)} km (1° di latitudine: sempre circa 111 km)</span>`;
+}
+$('mapSvg').addEventListener('click',e=>{
+  const s=$('mapSvg'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());
+  if(q.x<MX||q.x>MX+MW||q.y<MY||q.y>MY+MH)return;
+  mapPt=[Math.round((90-(q.y-MY)/MH*180)*10)/10,Math.round(((q.x-MX)/MW*360-180)*10)/10];drawMap();
+});
+cities.forEach(([n,la,lo])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>{mapPt=[la,lo];drawMap()};$('cityBtns').appendChild(b)});
+
+/* ---------- 3 Longitudine ---------- */
+function mins(v){const [h,m]=v.split(':').map(Number);return h*60+m}
+function drawLon(){
+  const s=$('lonSvg'),c=C();s.innerHTML='';
+  const L=$('lonLocal').value||'12:00',G=$('lonGr').value||'12:00';
+  let diff=mins(L)-mins(G); if(diff>720)diff-=1440; if(diff<-720)diff+=1440;
+  const deg=diff/4, side=deg>0?'Est':deg<0?'Ovest':'';
+  // scale bar of hours -12..12 -> -180..180
+  const x0=30,x1=370,xm=200,xs=v=>xm+v/180*(x1-xm);
+  el('line',{x1:x0,y1:120,x2:x1,y2:120,stroke:c.line,'stroke-width':2},s);
+  for(let h=-12;h<=12;h+=3){const x=xs(h*15);el('line',{x1:x,y1:114,x2:x,y2:126,stroke:c.muted},s);
+    el('text',{x,y:142,'font-size':10,fill:c.muted,'text-anchor':'middle'},s,(h>0?'+':'')+h+' h');
+    el('text',{x,y:156,'font-size':10,fill:c.muted,'text-anchor':'middle'},s,Math.abs(h*15)+'°')}
+  el('text',{x:x0,y:178,'font-size':11,fill:c.muted},s,'Ovest: ora più presto');
+  el('text',{x:x1,y:178,'font-size':11,fill:c.muted,'text-anchor':'end'},s,'Est: ora più tardi');
+  el('circle',{cx:xm,cy:120,r:7,fill:c.sun},s);el('text',{x:xm,y:100,'font-size':11,fill:c.ink,'text-anchor':'middle'},s,'Greenwich '+G);
+  const xp=xs(Math.max(-180,Math.min(180,deg)));
+  el('rect',{x:Math.min(xm,xp),y:116,width:Math.abs(xp-xm),height:8,fill:c.ocean,opacity:.6},s);
+  el('circle',{cx:xp,cy:120,r:7,fill:c.ocean},s);el('text',{x:xp,y:72,'font-size':11,fill:c.ink,'text-anchor':'middle'},s,'il tuo luogo '+L);
+  el('line',{x1:xp,y1:78,x2:xp,y2:112,stroke:c.ocean},s);
+  el('text',{x:200,y:30,'font-size':13,fill:c.ink,'text-anchor':'middle','font-weight':700},s,'1 ora = 15°   ·   4 minuti = 1°');
+  const ab=Math.abs(diff);
+  $('lonRes').innerHTML=`Differenza: ${Math.floor(ab/60)} h ${ab%60} min = <b>${ab} minuti</b><br>${ab} : 4 = <b>${fmt(Math.abs(deg),2).replace(/,00$/,'')}° ${side}</b><br><span class="note">${deg>0?'Da te è più tardi che a Greenwich: sei a Est.':deg<0?'Da te è più presto che a Greenwich: sei a Ovest.':'Stessa ora: sei sul meridiano di Greenwich.'}</span>`;
+}
+['lonLocal','lonGr'].forEach(i=>$(i).addEventListener('input',drawLon));
+
+/* ---------- 4 Fusi orari ---------- */
+const tzCities=[['Los Angeles',-118.2,-8],['New York',-74,-5],['Rio de Janeiro',-43.2,-3],['Londra',-0.1,0],['Roma',12.5,1],['Mosca',37.6,3],['Tokyo',139.7,9],['Sydney',151.2,10]];
+const hhmm=h=>{h=((h%24)+24)%24;const H=Math.floor(h),M=Math.round((h-H)*60);return String(H).padStart(2,'0')+':'+String(M).padStart(2,'0')};
+function drawTz(){
+  const s=$('tzSvg'),c=C();s.innerHTML='';const g=+$('tzH').value;$('tzHOut').textContent=hhmm(g);
+  const X0=20,W=360,Y0=30,H=120,xl=lon=>X0+(lon+180)/360*W;
+  // day/night shading by solar time
+  for(let i=0;i<360;i+=2){const lon=-180+i+1,solar=((g+lon/15)%24+24)%24;const day=solar>=6&&solar<18;
+    el('rect',{x:xl(lon-1),y:Y0,width:W/180+.3,height:H,fill:day?c.sunS:c.night,opacity:day?1:.85},s)}
+  for(let z=-12;z<=12;z++){const x=xl(z*15-7.5);if(x>=X0&&x<=X0+W)el('line',{x1:x,y1:Y0,x2:x,y2:Y0+H,stroke:c.line,'stroke-width':.8},s)}
+  // noon meridian = where solar 12
+  let noon=(12-g)*15;noon=((noon+180)%360+360)%360-180;
+  el('line',{x1:xl(noon),y1:Y0-6,x2:xl(noon),y2:Y0+H+6,stroke:c.sun,'stroke-width':2.5},s);
+  el('text',{x:xl(noon),y:Y0-10,'font-size':10,fill:c.sun,'text-anchor':'middle','font-weight':700},s,'mezzogiorno');
+  el('line',{x1:xl(0),y1:Y0,x2:xl(0),y2:Y0+H,stroke:c.ocean,'stroke-width':1.5,'stroke-dasharray':'3 2'},s);
+  el('line',{x1:xl(180)-1,y1:Y0,x2:xl(180)-1,y2:Y0+H,stroke:c.ink,'stroke-width':1.5,'stroke-dasharray':'2 2'},s);
+  el('text',{x:xl(180)-3,y:Y0+H+14,'font-size':9,fill:c.muted,'text-anchor':'end'},s,'linea del cambiamento di data');
+  el('text',{x:xl(0),y:Y0+H+14,'font-size':9,fill:c.ocean,'text-anchor':'middle'},s,'Greenwich');
+  tzCities.forEach(([n,lo],i)=>{const x=xl(lo),y=Y0+18+(i%4)*28;el('circle',{cx:x,cy:y,r:3.5,fill:c.ocean,stroke:c.panel},s);
+    el('text',{x:x+(lo>120?-6:6),y:y+4,'font-size':10,fill:c.ink,'text-anchor':lo>120?'end':'start',stroke:c.panel,'stroke-width':3,'paint-order':'stroke'},s,n)});
+  el('text',{x:X0,y:Y0+H+30,'font-size':10,fill:c.muted},s,'Ovest');el('text',{x:X0+W,y:Y0+H+30,'font-size':10,fill:c.muted,'text-anchor':'end'},s,'Est');
+  el('text',{x:200,y:Y0+H+48,'font-size':10,fill:c.muted,'text-anchor':'middle'},s,'chiaro = dì · scuro = notte · le righe sottili separano i 24 fusi');
+  const tb=$('tzBody');tb.innerHTML='';
+  tzCities.forEach(([n,lo,off])=>{const t=g+off,solar=((g+lo/15)%24+24)%24,day=solar>=6&&solar<18;
+    const dayShift=Math.floor(t/24);const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${n}</td><td>${off>=0?'+':''}${off}</td><td>${hhmm(t)}${dayShift>0?' <span class="note">(giorno dopo)</span>':dayShift<0?' <span class="note">(giorno prima)</span>':''}</td><td class="${day?'day':'nightc'}">${day?'dì':'notte'}</td>`;tb.appendChild(tr)});
+}
+$('tzH').addEventListener('input',drawTz);
+
+/* ---------- 5 Stagioni ---------- */
+const MESI=['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+const LEN=[31,28,31,30,31,30,31,31,30,31,30,31];
+function dayName(n){let m=0;while(n>LEN[m]){n-=LEN[m];m++}return n+' '+MESI[m]}
+const seaKeys=[['21 marzo',80],['21 giugno',172],['23 settembre',266],['21 dicembre',355]];
+function drawSea(){
+  const s=$('seaSvg'),c=C();s.innerHTML='';
+  const doy=+$('seaDay').value,lat=+$('seaLat').value;
+  $('seaDayOut').textContent=dayName(doy);$('seaLatOut').textContent=lat===0?'0° (Equatore)':Math.abs(lat)+'° '+(lat>0?'N':'S');
+  const dec=23.44*Math.sin(2*Math.PI*(doy-80)/365);
+  arrowDef(s,'seA',c.muted);
+  // --- top: orbit ---
+  const ox=200,oy=128,R=78;
+  el('text',{x:12,y:18,'font-size':12,fill:c.muted},s,'Vista dall\'alto: la Terra gira attorno al Sole');
+  el('ellipse',{cx:ox,cy:oy,rx:R+6,ry:R-4,fill:'none',stroke:c.line,'stroke-width':1.5},s);
+  el('circle',{cx:ox,cy:oy,r:16,fill:c.sun},s);el('text',{x:ox,y:oy+4,'font-size':10,'text-anchor':'middle',fill:c.night},s,'Sole');
+  seaKeys.forEach(([n,d])=>{const th=2*Math.PI*(d-172)/365;const x=ox+(R+6)*Math.cos(th),y=oy-(R-4)*Math.sin(th);
+    el('circle',{cx:x,cy:y,r:3,fill:c.muted},s);
+    el('text',{x:x+(Math.cos(th)>0.5?10:Math.cos(th)<-0.5?-10:0),y:y+(Math.sin(th)>0.5?-10:Math.sin(th)<-0.5?16:4),'font-size':10,fill:c.muted,'text-anchor':Math.cos(th)>0.5?'start':Math.cos(th)<-0.5?'end':'middle'},s,n)});
+  const th=2*Math.PI*(doy-172)/365,ex=ox+(R+6)*Math.cos(th),ey=oy-(R-4)*Math.sin(th);
+  el('circle',{cx:ex,cy:ey,r:9,fill:c.ocean},s);
+  // axis projection always pointing left (toward where sun is in June)
+  el('line',{x1:ex+9,y1:ey,x2:ex-16,y2:ey,stroke:c.ink,'stroke-width':2},s);
+  el('circle',{cx:ex-16,cy:ey,r:2,fill:c.ink},s);
+  el('text',{x:ox,y:oy+R+30,'font-size':10,fill:c.muted,'text-anchor':'middle'},s,'la lineetta nera è l\'asse: punta sempre dalla stessa parte');
+  // --- bottom: side view ---
+  const sx=240,sy=338,r=64;
+  el('text',{x:12,y:248,'font-size':12,fill:c.muted},s,'Vista di lato: la luce arriva da sinistra');
+  for(let i=0;i<5;i++)el('line',{x1:20,y1:290+i*24,x2:120,y2:290+i*24,stroke:c.sun,'stroke-width':1.5,'marker-end':'url(#seA)'},s);
+  el('circle',{cx:sx,cy:sy,r,fill:c.oceanS,stroke:c.ocean},s);
+  el('path',{d:`M${sx} ${sy-r} A${r} ${r} 0 0 1 ${sx} ${sy+r} Z`,fill:c.night,opacity:.55},s);
+  // axis tilted toward sun by dec: north pole leans left when dec>0
+  const tilt=dec*Math.PI/180, ax=-Math.sin(tilt),ay=-Math.cos(tilt);
+  const latLine=(φ,attrs)=>{const p=φ*Math.PI/180;const cxp=sx+ax*r*Math.sin(p),cyp=sy+ay*r*Math.sin(p),hw=r*Math.cos(p);
+    el('line',{x1:cxp-ay*hw,y1:cyp+ax*hw,x2:cxp+ay*hw,y2:cyp-ax*hw,...attrs},s)};
+  latLine(0,{stroke:c.ocean,'stroke-width':1.5});
+  [23.44,-23.44].forEach(p=>latLine(p,{stroke:c.muted,'stroke-dasharray':'3 3'}));
+  [66.56,-66.56].forEach(p=>latLine(p,{stroke:c.muted,'stroke-dasharray':'1 3'}));
+  latLine(lat,{stroke:c.sun,'stroke-width':3});
+  el('line',{x1:sx-ax*(r+18),y1:sy-ay*(r+18),x2:sx+ax*(r+18),y2:sy+ay*(r+18),stroke:c.ink,'stroke-width':2},s);
+  el('text',{x:sx+ax*(r+28),y:sy+ay*(r+28)+4,'font-size':11,'text-anchor':'middle',fill:c.ink},s,'N');
+  el('text',{x:sx-ax*(r+28),y:sy-ay*(r+28)+4,'font-size':11,'text-anchor':'middle',fill:c.ink},s,'S');
+  el('text',{x:sx+r+8,y:sy+4,'font-size':10,fill:c.muted},s,'notte');
+  el('text',{x:sx-r-8,y:sy+4,'font-size':10,fill:c.muted,'text-anchor':'end'},s,'dì');
+  el('text',{x:sx,y:sy+r+40,'font-size':10,fill:c.sun,'text-anchor':'middle'},s,'linea arancione = il tuo parallelo');
+  // calculations
+  const φ=lat*Math.PI/180,δ=dec*Math.PI/180;let ch=-Math.tan(φ)*Math.tan(δ),hours;
+  if(Math.abs(lat)>=89.9){hours=(lat*dec>0)?24:0} else if(ch<=-1)hours=24;else if(ch>=1)hours=0;else hours=2*Math.acos(ch)*180/Math.PI/15;
+  const alt=90-Math.abs(lat-dec);
+  const hemiN=dec>0.5?'il Polo nord è inclinato verso il Sole':dec<-0.5?'il Polo sud è inclinato verso il Sole':'nessun polo è inclinato verso il Sole';
+  const nS=doy>=80&&doy<172?0:doy>=172&&doy<266?1:doy>=266&&doy<355?2:3;
+  const SN=['primavera','estate','autunno','inverno'];
+  const sea=Math.abs(lat)<23.5?'zona torrida: niente stagioni nette':(lat>0?SN[nS]:SN[(nS+2)%4]);
+  const H=Math.floor(hours),M=Math.round((hours-H)*60);
+  $('seaRes').innerHTML=`Oggi ${hemiN}. Il Sole è a picco su ${fmt(Math.abs(dec),1)}° ${dec>=0?'N':'S'}.<br>Durata del dì qui: <b>${hours>=24?'24 h (mai buio)':hours<=0?'0 h (sempre notte)':H+' h '+String(M).padStart(2,'0')+' min'}</b><br>Altezza del Sole a mezzogiorno: <b>${alt>0?fmt(alt)+'°':'sotto l\'orizzonte'}</b><br><span class="note">Stagione qui: ${sea}</span>`;
+}
+['seaDay','seaLat'].forEach(i=>$(i).addEventListener('input',drawSea));
+seaKeys.forEach(([n,d])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>{$('seaDay').value=d;drawSea()};$('seaBtns').appendChild(b)});
+[['Roma',42],['Equatore',0],['Polo nord',90],['Sydney',-34]].forEach(([n,l])=>{const b=document.createElement('button');b.type='button';b.textContent='Lat. '+n;b.onclick=()=>{$('seaLat').value=l;drawSea()};$('seaBtns').appendChild(b)});
+
+/* ---------- 6 Luna ---------- */
+const SYN=29.53;
+function moonPath(cx,cy,r,a){ // a: phase angle 0=new
+  const k=Math.cos(a),rx=Math.abs(k)*r;const wax=a<=Math.PI;
+  if(wax){return `M${cx} ${cy-r} A${r} ${r} 0 0 1 ${cx} ${cy+r} A${rx} ${r} 0 0 ${k>0?0:1} ${cx} ${cy-r}Z`}
+  return `M${cx} ${cy-r} A${r} ${r} 0 0 0 ${cx} ${cy+r} A${rx} ${r} 0 0 ${k>0?1:0} ${cx} ${cy-r}Z`;
+}
+function drawMoon(){
+  const s=$('moonSvg'),c=C();s.innerHTML='';const age=+$('moonAge').value;$('moonAgeOut').textContent=fmt(age,1);
+  const a=2*Math.PI*age/SYN;arrowDef(s,'moA',c.sun);
+  el('text',{x:12,y:18,'font-size':12,fill:c.muted},s,'Vista dall\'alto');
+  for(let i=0;i<5;i++)el('line',{x1:8,y1:50+i*40,x2:50,y2:50+i*40,stroke:c.sun,'stroke-width':1.5,'marker-end':'url(#moA)'},s);
+  el('text',{x:8,y:250,'font-size':10,fill:c.sun},s,'luce del Sole');
+  const ex=150,ey=135,R=80;
+  el('circle',{cx:ex,cy:ey,r:R,fill:'none',stroke:c.line,'stroke-dasharray':'4 4'},s);
+  el('circle',{cx:ex,cy:ey,r:18,fill:c.ocean},s);el('path',{d:`M${ex} ${ey-18}A18 18 0 0 1 ${ex} ${ey+18}Z`,fill:c.night,opacity:.6},s);
+  el('text',{x:ex,y:ey+4,'font-size':10,'text-anchor':'middle',fill:c.panel},s,'Terra');
+  // moon position: math angle 180+a, y screen inverted
+  const ang=Math.PI+a,mx=ex+R*Math.cos(ang),my=ey-R*Math.sin(ang);
+  el('circle',{cx:mx,cy:my,r:11,fill:c.night},s);
+  el('path',{d:`M${mx} ${my-11}A11 11 0 0 0 ${mx} ${my+11}Z`,fill:'#f4f1e6'},s); // lit half faces sun (left)
+  el('line',{x1:ex,y1:ey,x2:mx,y2:my,stroke:c.muted,'stroke-dasharray':'2 3'},s);
+  // labels of 4 phases
+  [['nuova',0],['primo quarto',Math.PI/2],['piena',Math.PI],['ultimo quarto',3*Math.PI/2]].forEach(([n,b])=>{const g=Math.PI+b,x=ex+(R+16)*Math.cos(g),y=ey-(R+16)*Math.sin(g);
+    el('text',{x,y:y+4,'font-size':9,fill:c.muted,'text-anchor':Math.cos(g)<-.5?'end':Math.cos(g)>.5?'start':'middle'},s,n)});
+  // seen from Earth
+  const vx=330,vy=120,vr=48;
+  el('text',{x:vx,y:30,'font-size':12,fill:c.muted,'text-anchor':'middle'},s,'Come la vediamo noi');
+  el('circle',{cx:vx,cy:vy,r:vr,fill:c.night,stroke:c.line},s);
+  el('path',{d:moonPath(vx,vy,vr,a%(2*Math.PI)),fill:'#f4f1e6'},s);
+  const frac=(1-Math.cos(a))/2;
+  el('text',{x:vx,y:vy+vr+22,'font-size':12,fill:c.ink,'text-anchor':'middle'},s,'illuminata al '+fmt(frac*100)+'%');
+  const near=(t)=>Math.abs(age-t)<0.8;
+  let name=near(0)||near(SYN)?'Luna nuova':near(SYN/4)?'Primo quarto':near(SYN/2)?'Luna piena':near(3*SYN/4)?'Ultimo quarto':age<SYN/4?'Falce crescente':age<SYN/2?'Gibbosa crescente':age<3*SYN/4?'Gibbosa calante':'Falce calante';
+  let ecl=name==='Luna nuova'?'Se in questo momento la Luna è sulla linea dei nodi, c\'è un\'<b>eclissi di Sole</b>.':name==='Luna piena'?'Se in questo momento la Luna è sulla linea dei nodi, c\'è un\'<b>eclissi di Luna</b>.':'Eclissi possibili solo con Luna nuova (di Sole) o Luna piena (di Luna).';
+  $('moonRes').innerHTML=`Fase: <b>${name}</b><br><span class="note">${ecl}</span>`;
+}
+$('moonAge').addEventListener('input',drawMoon);
+[['Nuova',0],['Primo quarto',SYN/4],['Piena',SYN/2],['Ultimo quarto',3*SYN/4]].forEach(([n,v])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>{$('moonAge').value=v.toFixed(1);drawMoon()};$('moonBtns').appendChild(b)});
+
+function drawAll(){drawEr();drawMap();drawLon();drawTz();drawSea();drawMoon()}
+drawAll();
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawAll)}catch(e){}
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+function goHash(){const h=location.hash.slice(1);if(h){const t=document.getElementById(h);if(t)t.scrollIntoView()}}
+addEventListener('hashchange',goHash);addEventListener('load',goHash);
+</script>
+
+</body></html>
